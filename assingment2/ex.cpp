@@ -1,8 +1,8 @@
 #include <iostream>
 
 unsigned int length(const char* str){
-  if(str == NULL){
-    return 0;
+  if(str == NULL){ // if string is null, dont iterate through it
+    return 0; // null string is length 0
   }
   unsigned int i = 0;
   while(str[i] != '\0'){
