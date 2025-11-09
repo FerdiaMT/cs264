@@ -1,4 +1,4 @@
-#include <Matrix.h>
+#include "Matrix.h"
 #include <string>
 
 Matrix::Matrix(unsigned int m, unsigned int n) // constuctor of MxN matrix of 0's
@@ -154,6 +154,8 @@ Matrix Matrix::operator*(const Matrix &mat)
             result.data[i][j] = sum;
         }
     }
+
+    return result;
 }
 
 Matrix Matrix::operator~() const
@@ -199,25 +201,66 @@ bool Matrix::operator==(const Matrix &mat)
 
 std::string Matrix::toStr()
 {
-    // turn the matrix into a string
-
-    // the first thing im going to do is find the maximum value in the entire thing, so we know how much spacing to do
+    // Find the maximum width needed
+    int maxNum = 0;
     for (unsigned int i = 0; i < m_; i++) 
     {
         for (unsigned int j = 0; j < n_; j++) 
         {
-            
+            int dt = data[i][j];
+            if(dt < 0)
+            {
+                dt *= -1; // Get absolute value
+            }
+            if(maxNum < dt)
+            {
+                maxNum = dt;
+            }
         }
     }
+    
+    maxNum = std::to_string(maxNum).length();
+    maxNum++; // Add space between numbers
+    
     std::string result = "";
+
+    std::string line = "-";
+
+    for(int i = 0 ; i < m_* (maxNum+2) ; i++)
+    {
+        line += "-";
+    }
+    result += line;
+    result += "\n";
     for (unsigned int i = 0; i < m_; i++) 
     {
         std::string row = "";
+        
+        result += "| ";
         for (unsigned int j = 0; j < n_; j++) 
         {
-            row += std::to_string(data[i][j]);
+            std::string num = std::to_string(data[i][j]);
+            
+            row += num;
+            for(int n = num.length(); n < maxNum; n++)
+            {
+                row += " ";
+            }
 
+            row += "| ";
         }
+        result += row;
+        result += "\n";
+        result += line;
+        result += "\n";
     }
+    return result;
+}
 
+Matrix::~Matrix()
+{
+    for (unsigned int i = 0; i < m_; i++) {
+        delete[] data[i];
+    }
+    delete[] data;
 }
