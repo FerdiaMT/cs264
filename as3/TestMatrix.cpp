@@ -3,7 +3,6 @@
 
 using namespace std;
 
-// ========== Constructor(m, n) Tests ==========
 void Test_Case_1_Constructor_Basic() {
     cout << "Test Case 1 - Constructor(m, n) - Basic: ";
     Matrix* mat = new Matrix(3, 4);
@@ -46,7 +45,6 @@ void Test_Case_3_Constructor_Single_Element() {
     delete mat;
 }
 
-// ========== Copy Constructor Tests ==========
 void Test_Case_4_Copy_Constructor_Basic() {
     cout << "Test Case 4 - Copy Constructor - Basic: ";
     Matrix* mat1 = new Matrix(2, 2);
@@ -70,7 +68,7 @@ void Test_Case_5_Copy_Constructor_Deep_Copy() {
     mat1->set(0, 0, 100);
     
     Matrix* mat2 = new Matrix(*mat1);
-    mat1->set(0, 0, 999);  // Modify original
+    mat1->set(0, 0, 999);  
     
     // mat2 should still have 100, not 999 (proves deep copy)
     if (mat2->get(0, 0) == 100 && mat1->get(0, 0) == 999) {
@@ -107,7 +105,6 @@ void Test_Case_6_Copy_Constructor_Large() {
     delete mat2;
 }
 
-// ========== Array Constructor Tests ==========
 void Test_Case_7_Array_Constructor_Basic() {
     cout << "Test Case 7 - Constructor(array, m, n) - Basic: ";
     
@@ -148,10 +145,8 @@ void Test_Case_8_Array_Constructor_Independence() {
     
     Matrix* mat = new Matrix(arr, 2, 2);
     
-    // Modify original array
     arr[0][0] = 999;
     
-    // Matrix should still have 50
     bool passed = (mat->get(0, 0) == 50);
     
     for (int i = 0; i < 2; i++) {
@@ -195,7 +190,6 @@ void Test_Case_9_Array_Constructor_Negative() {
     }
 }
 
-// ========== rows() Tests ==========
 void Test_Case_10_Rows_Basic() {
     cout << "Test Case 10 - rows() - Basic: ";
     Matrix* mat = new Matrix(5, 3);
@@ -218,7 +212,6 @@ void Test_Case_11_Rows_Square() {
     delete mat;
 }
 
-// ========== columns() Tests ==========
 void Test_Case_12_Columns_Basic() {
     cout << "Test Case 12 - columns() - Basic: ";
     Matrix* mat = new Matrix(5, 7);
@@ -241,7 +234,6 @@ void Test_Case_13_Columns_Single() {
     delete mat;
 }
 
-// ========== get() Tests ==========
 void Test_Case_14_Get_Basic() {
     cout << "Test Case 14 - get() - Basic: ";
     Matrix* mat = new Matrix(3, 3);
@@ -277,7 +269,6 @@ void Test_Case_16_Get_Negative() {
     delete mat;
 }
 
-// ========== set() Tests ==========
 void Test_Case_17_Set_Basic() {
     cout << "Test Case 17 - set() - Basic: ";
     Matrix* mat = new Matrix(2, 2);
@@ -331,7 +322,6 @@ void Test_Case_19_Set_Multiple() {
     delete mat;
 }
 
-// ========== Addition Tests ==========
 void Test_Case_20_Addition_Basic() {
     cout << "Test Case 20 - operator+ - Basic: ";
     Matrix* mat1 = new Matrix(2, 2);
@@ -379,7 +369,7 @@ void Test_Case_21_Addition_Negative() {
 void Test_Case_22_Addition_Zero() {
     cout << "Test Case 22 - operator+ - Add Zero Matrix: ";
     Matrix* mat1 = new Matrix(3, 3);
-    Matrix* mat2 = new Matrix(3, 3);  // All zeros
+    Matrix* mat2 = new Matrix(3, 3);  
     
     mat1->set(0, 0, 5);
     mat1->set(1, 1, 10);
@@ -397,7 +387,6 @@ void Test_Case_22_Addition_Zero() {
     delete result;
 }
 
-// ========== Subtraction Tests ==========
 void Test_Case_23_Subtraction_Basic() {
     cout << "Test Case 23 - operator- - Basic: ";
     Matrix* mat1 = new Matrix(2, 2);
@@ -460,7 +449,6 @@ void Test_Case_25_Subtraction_Self() {
     delete result;
 }
 
-// ========== Multiplication Tests ==========
 void Test_Case_26_Multiplication_Basic() {
     cout << "Test Case 26 - operator* - Basic: ";
     Matrix* mat1 = new Matrix(2, 3);
@@ -499,9 +487,6 @@ void Test_Case_27_Multiplication_Square() {
     mat2->set(1, 0, 1); mat2->set(1, 1, 2);
     
     Matrix* result = new Matrix(*mat1 * *mat2);
-    
-    // [1,2] * [2,0] = [4, 4]
-    // [3,4]   [1,2]   [10,8]
     if (result->get(0, 0) == 4 && result->get(0, 1) == 4 &&
         result->get(1, 0) == 10 && result->get(1, 1) == 8) {
         cout << "PASSED" << endl;
@@ -538,7 +523,6 @@ void Test_Case_28_Multiplication_Identity() {
     delete result;
 }
 
-// ========== Transpose Tests ==========
 void Test_Case_29_Transpose_Basic() {
     cout << "Test Case 29 - operator~ - Basic: ";
     Matrix* mat = new Matrix(2, 3);
@@ -601,7 +585,6 @@ void Test_Case_31_Transpose_Double() {
     delete result;
 }
 
-// ========== Equality Tests ==========
 void Test_Case_32_Equality_Same() {
     cout << "Test Case 32 - operator== - Identical Matrices: ";
     Matrix* mat1 = new Matrix(2, 2);
@@ -667,7 +650,6 @@ void Test_Case_35_Equality_Zero_Matrices() {
     delete mat2;
 }
 
-// ========== toString Tests ==========
 void Test_Case_36_ToString_Basic() {
     cout << "Test Case 36 - toStr() - Basic: ";
     Matrix* mat = new Matrix(2, 2);
@@ -719,8 +701,6 @@ void Test_Case_38_ToString_Large_Numbers() {
     }
     delete mat;
 }
-
-// Main test runner
 int main() {
     cout << "=====================================" << endl;
     cout << "      Matrix Class Test Suite       " << endl;
@@ -791,7 +771,7 @@ int main() {
     Test_Case_38_ToString_Large_Numbers();
     
     cout << "\n=====================================" << endl;
-    cout << "         All Tests Complete!         " << endl;
+    cout << "         All Tests Ran.         " << endl;
     cout << "=====================================" << endl;
     
     return 0;

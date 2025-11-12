@@ -1,6 +1,14 @@
 #include "Matrix.h"
 #include <string>
 
+/**
+ * This is the standand constructor that creates an n*m matrix 
+ * It fills the array with 0's 
+ * @param m is the width of the amatrix
+ * @param n is the height of the matrix
+ * @return Matrix which is the matrix class, with local variable data containing the actual numbers 
+ */
+
 Matrix::Matrix(unsigned int m, unsigned int n) // constuctor of MxN matrix of 0's
 {
     this->m_ = m; // set the rows
@@ -19,6 +27,15 @@ Matrix::Matrix(unsigned int m, unsigned int n) // constuctor of MxN matrix of 0'
         }
     }
 }
+
+/**
+ * This is the copy constructor
+ * We pass in a different matrix class, and this method will intiialize it to have the same values
+ * We make a deep copy of the array data, as otherwise we would have an array whos data is stored in a different Matrix 
+ * And if we deleted said matrix, our pointers would point to data which has now been deleted 
+ * @param mat is another matrix we pass in 
+ * @return Matrix which has its values which are copied from the passed in matrix
+ */
 
 Matrix::Matrix(const Matrix &mat): m_(mat.m_) , n_(mat.n_) // the copy function, so we grab all the data and allocate it
 {
@@ -40,6 +57,14 @@ Matrix::Matrix(const Matrix &mat): m_(mat.m_) , n_(mat.n_) // the copy function,
     }
 }
 
+/**
+ * This is the matrix constructor where we instead pass in a 2d array allongside its width and height for the data
+ * our constructor once again deep copys so there are no memory errors
+ * @param m matrix width 
+ * @param n matrix height
+ * @param array the 2d array pointer we use to fill in our data for the matrix 
+ * @return the constructed matrixs
+ */
 Matrix::Matrix ( int ** array , unsigned int m , unsigned int n ) : m_(m) , n_(n) // this is for passing in a 2d array pointer 
 {
     // once again, we would get the same issue as the copy function, where if that array was killed, we would have pointers leading 
@@ -57,30 +82,58 @@ Matrix::Matrix ( int ** array , unsigned int m , unsigned int n ) : m_(m) , n_(n
     }
 }
 
+/**
+ * this is a getter for how many rows are in the matrix 
+ * @return m_ , the amount of rows 
+ */
 unsigned int Matrix::rows() const
 {
     return this->m_;
 }
+/**
+ * this is a getter for how many cols are in the matrix 
+ * @return n_ the amount of cols 
+ */
 unsigned int Matrix::columns() const
 {
     return this->n_;
 }
+/**
+ * this is a getter for the value stored in data at a certain indices
+ * it will return an error if we go out of bounds in the matrices 
+ * @param i , what x we use to get the value from the grid 
+ * @param j , what y we use to get the value from the grid
+ * @return data[i][j] , the int value stored in the matrix at i ,j
+ */
 int Matrix::get(unsigned i, unsigned j) const
 {
-    if (i >= m_ || j >= n_|| i < 0 || j < 0 ) // check if were going to be out of bounds
+    if (i >= m_ || j >= n_ ) // check if were going to be out of bounds
     { 
-        return NULL; // out of bounds value isnt defined by the ca, but ill return NULL here 
+      std::cerr << i<< " , " << j " is out of bounds for matrix whos bounds are " << this->m_ << " , "this->n_ << std::endl;
+      return NULL; // out of bounds value isnt defined by the ca, but ill return NULL here 
     }
     return data[i][j];
 }               
+/**
+ * This sets the value at i j to a certain value we pass
+ * if it is out of bounds we will get an error 
+ * @param i is the x of the matrix we want to change 
+ * @param j is the y of the matrix we want to change 
+ */
 void Matrix::set(unsigned i, unsigned j, int value)
 {
     if (i >= m_ || j >= n_|| i < 0 || j < 0 ) { // check if were going to be out of bounds
-        return;
+      std::cerr << i<< " , " << j " is out of bounds for matrix whos bounds are " << this->m_ << " , "this->n_ << std::endl;        return;
     }
     data[i][j] = value;
 }          
-
+/**
+ * This operator overload is for adding 2 matrices of equal m and n 
+ * it iterates through the 2 matrices and adds the values together 
+ * once its done adding the values it then returns the matrix 
+ * @param mat is the passed in matrix we want to add with 
+ * @return Matrix which is the result of the addition of the 2 matrixs 
+ */
 Matrix Matrix::operator+(const Matrix &mat) // return matrix that contains addition of the 2 matrices
 {
 
@@ -97,6 +150,7 @@ Matrix Matrix::operator+(const Matrix &mat) // return matrix that contains addit
     // we can just return an empty matrix if it isnt
     if (m_ != mat.m_ || n_ != mat.n_) 
     {
+        std::cerr<< "matrixes m and n are not matching, M1: ("<<m_","<<n_<<") M2: ("<<mat.m_<<","mat.n_<<")"<<std::endl; 
         return result; 
     }
     
@@ -111,6 +165,13 @@ Matrix Matrix::operator+(const Matrix &mat) // return matrix that contains addit
     
     return result;  //return by value
 }
+/**
+ * This operator overload is for subtracting 2 matrices of equal m and n 
+ * it iterates through the 2 matrices and subtracts  the values 
+ * once its done subbing the values it then returns the matrix 
+ * @param mat is the passed in matrix we want to subtract with 
+ * @return Matrix which is the result of the subtraction of the 2 matrixs 
+ */
 
 Matrix Matrix::operator-(const Matrix &mat)
 {
@@ -120,6 +181,7 @@ Matrix Matrix::operator-(const Matrix &mat)
 
     if (m_ != mat.m_ || n_ != mat.n_) 
     {
+        std::cerr<< "matrixes m and n are not matching, M1: ("<<m_","<<n_<<") M2: ("<<mat.m_<<","mat.n_<<")"<<std::endl; 
         return result; 
     }
     // subtract the 2 elements
@@ -132,6 +194,14 @@ Matrix Matrix::operator-(const Matrix &mat)
     }
     return result; 
 }
+/**
+ * This operator overload is for multiplying 2 matrices where n is equal to m 
+ * it iterates through the 2 matrices, and uses a loop (for k) to multiply the rows against the columns 
+ * once its done multiplying the values it then returns the matrix 
+ * @param mat is the passed in matrix we want to multiply with 
+ * @return Matrix which is the result of the multiplication of the 2 matrixs 
+ */
+
 Matrix Matrix::operator*(const Matrix &mat)
 {
     // same informamation about my code as +
@@ -140,6 +210,7 @@ Matrix Matrix::operator*(const Matrix &mat)
 
     if (n_ != mat.m_)  // it needs to be able to multiply, so n  has to be the same as m 
     {
+        std::cerr<< "M1 n and M2 m are not matching, M1: ("<<m_","<<n_<<") M2: ("<<mat.m_<<","mat.n_<<")"<<std::endl; 
         return result;
     }
     
@@ -157,6 +228,11 @@ Matrix Matrix::operator*(const Matrix &mat)
 
     return result;
 }
+/**
+ * This operator overload is for transposing a matrix 
+ * It doesnt take in any input, as all it is doing is effectivly rotating the matrix 
+ * @return Matrix which is the transposed matrix 
+ */
 
 Matrix Matrix::operator~() const
 {
@@ -173,6 +249,14 @@ Matrix Matrix::operator~() const
     
     return result;
 }
+/**
+ * This operator overload is for checking if 2 matrices are equal
+ * if we used the normal operator ==, it would check if its the same declared object in memory
+ * we want an easy way to check if the 2 matrices have the exact same data stored 
+ * this method does that by going through the 2 array, and making sure m and n are equal
+ * @param mat is the passed in matrix 
+ * @return bool which tells us if they are equal or not 
+ */
 
 bool Matrix::operator==(const Matrix &mat)
 {
@@ -199,6 +283,14 @@ bool Matrix::operator==(const Matrix &mat)
     return true;
 }
 
+/**
+ * this function turns the currently stored data of the 2d array into a string 
+ * i like to format this nicely, so the first thing this function does is find the widest length string 
+ * as in 1234 is length 4, -1234 is length 5 etc
+ * then when it makes the matrix, it will pad each numbers width so the matrix will look nice 
+ * it also surrounds the matrix in - and | in order to make it more readable 
+ * @return result which contains the graph in string form for printing 
+ */
 std::string Matrix::toStr()
 {
     // Find the maximum width needed
@@ -256,7 +348,11 @@ std::string Matrix::toStr()
     }
     return result;
 }
-
+/**
+ * this is the destructor 
+ * its called every time i want to delete the matrix from memory 
+ * we clear the data individually , then the data itself , as we basically have an array of arrays 
+ * it returns nothing and takes in nothing 
 Matrix::~Matrix()
 {
     for (unsigned int i = 0; i < m_; i++) {
